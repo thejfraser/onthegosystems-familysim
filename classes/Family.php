@@ -79,7 +79,7 @@ class Family
             throw new MissingRequiredMemberException($nameList);
         }
 
-        $class = get_class($familyMember);
+        $class = $familyMember::getEntityName();
         if (!isset($this->loadedFamily[$class])) {
             $this->loadedFamily[$class] = [];
         }
@@ -98,7 +98,7 @@ class Family
         if (!($familyMember instanceof LimitedQuantityInterface)) {
             return true;
         }
-        return $this->getCountOfMember(get_class($familyMember)) < $familyMember->getQuantityLimit();
+        return $this->getCountOfMember($familyMember::getEntityName()) < $familyMember->getQuantityLimit();
 
     }
 

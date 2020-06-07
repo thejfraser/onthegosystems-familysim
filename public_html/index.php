@@ -2,6 +2,7 @@
 
 use Exceptions\LimitedQuantityException;
 use Exceptions\MissingRequiredMemberException;
+use FamilyMembers\AdaptChild;
 use FamilyMembers\Cat;
 use FamilyMembers\Child;
 use FamilyMembers\Dad;
@@ -34,6 +35,11 @@ if (isset($_REQUEST['control'])) {
                 break;
             case 'add_child':
                 $lastModel = new Child();
+                $family->addMember($lastModel);
+                $family->save();
+                break;
+            case 'add_adapt_child':
+                $lastModel = new AdaptChild();
                 $family->addMember($lastModel);
                 $family->save();
                 break;
@@ -72,12 +78,12 @@ function summary(Family $family)
     }
 
     $map = [
-        Mum::class => 'Mum',
-        Dad::class => 'Dad',
-        Child::class => 'Children',
-        Cat::class => 'Cats',
-        Dog::class => 'Dogs',
-        Goldfish::class => 'Goldfish',
+        Mum::getEntityName() => 'Mum',
+        Dad::getEntityName() => 'Dad',
+        Child::getEntityName() => 'Children',
+        Cat::getEntityName() => 'Cats',
+        Dog::getEntityName() => 'Dogs',
+        Goldfish::getEntityName() => 'Goldfish',
     ];
 
     echo '<h2>Family</h2>';
@@ -107,6 +113,7 @@ if (isset($_REQUEST['refresh'])) {
     <input type="submit" name="add_mum" value="Add Mum"/>
     <input type="submit" name="add_dad" value="Add Dad"/>
     <input type="submit" name="add_child" value="Add Child"/>
+    <input type="submit" name="add_adapt_child" value="Add Adapt Child"/>
     <input type="submit" name="add_cat" value="Add Cat"/>
     <input type="submit" name="add_dog" value="Add Dog"/>
     <input type="submit" name="add_goldfish" value="Add Goldfish"/>
