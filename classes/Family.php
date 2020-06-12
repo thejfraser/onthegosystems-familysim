@@ -126,7 +126,7 @@ class Family
         }
 
         $familyMemberCount = array_map(function ($class) {
-            return $this->getCountOfMember($class);
+            return $this->getCountOfMember(call_user_func([$class, 'getEntityName']));
         }, $familyMember->getPossibleRequiredMember());
 
         if (count($familyMemberCount) === 0) {

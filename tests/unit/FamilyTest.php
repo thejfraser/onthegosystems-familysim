@@ -104,9 +104,9 @@ class FamilyTest extends TestCase
         $family->addMember(new Child());
 
         $expected = [
-            Mum::class => 1,
-            Dad::class => 1,
-            Child::class => 3
+            Mum::getEntityName() => 1,
+            Dad::getEntityName()  => 1,
+            Child::getEntityName()  => 3
         ];
 
         $this->assertEquals($expected, $family->getAllCount());
