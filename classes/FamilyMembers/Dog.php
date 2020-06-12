@@ -3,11 +3,11 @@
 namespace FamilyMembers;
 
 use Interfaces\FamilyMemberInterface;
-use Interfaces\RequiresOtherMemberInterface;
+use Interfaces\RequiresSomeOtherMemberInterface;
 use Traits\EntityNameTrait;
 use Traits\RequiresMumOrDadTrait;
 
-class Dog implements FamilyMemberInterface, RequiresOtherMemberInterface
+class Dog implements FamilyMemberInterface, RequiresSomeOtherMemberInterface
 {
     use RequiresMumOrDadTrait;
     use EntityNameTrait;

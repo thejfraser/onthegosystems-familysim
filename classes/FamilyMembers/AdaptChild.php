@@ -3,13 +3,12 @@
 namespace FamilyMembers;
 
 use Interfaces\FamilyMemberInterface;
-use Interfaces\RequiresOtherMemberInterface;
-use Traits\EntityNameTrait;
-use Traits\RequiresMumOrDadTrait;
+use Interfaces\RequiresAllOtherMemberInterface;
+use Traits\RequiresMumTrait;
 
-class AdaptChild implements FamilyMemberInterface
+class AdaptChild implements FamilyMemberInterface, RequiresAllOtherMemberInterface
 {
-    use RequiresMumOrDadTrait;
+    use RequiresMumTrait;
 
     public static function getEntityName(): string
     {

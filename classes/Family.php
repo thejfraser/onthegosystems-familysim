@@ -5,7 +5,8 @@ use Exceptions\MissingRequiredMemberException;
 use Factories\Storage;
 use Interfaces\FamilyMemberInterface;
 use Interfaces\LimitedQuantityInterface;
-use Interfaces\RequiresOtherMemberInterface;
+use Interfaces\RequiresAllOtherMemberInterface;
+use Interfaces\RequiresSomeOtherMemberInterface;
 
 class Family
 {
@@ -67,7 +68,8 @@ class Family
             throw new LimitedQuantityException($familyMember::getEntityName());
         }
 
-        if ($familyMember instanceof RequiresOtherMemberInterface && !$this->validateRequiredMembers($familyMember)) {
+
+        if ($familyMember instanceof RequiresSomeOtherMemberInterface && !$this->validateRequiredMembers($familyMember)) {
             $names = array_map(function ($class) {
                 return call_user_func([$class, 'getEntityName']);
             }, $familyMember->getPossibleRequiredMember());
@@ -75,6 +77,19 @@ class Family
             $nameList = array_pop($names);
             if (count($names) > 0) {
                 $nameList = implode(', ', $names) . ' or ' . $nameList;
+            }
+            throw new MissingRequiredMemberException($nameList);
+        }
+
+
+        if ($familyMember instanceof RequiresAllOtherMemberInterface && !$this->validateRequiredMembers($familyMember)) {
+            $names = array_map(function ($class) {
+                return call_user_func([$class, 'getEntityName']);
+            }, $familyMember->getRequiredMember());
+
+            $nameList = array_pop($names);
+            if (count($names) > 0) {
+                $nameList = implode(', ', $names) . ' and ' . $nameList;
             }
             throw new MissingRequiredMemberException($nameList);
         }
@@ -121,19 +136,27 @@ class Family
      */
     public function validateRequiredMembers(FamilyMemberInterface $familyMember)
     {
-        if (!($familyMember instanceof RequiresOtherMemberInterface)) {
-            return true;
+        if ($familyMember instanceof RequiresSomeOtherMemberInterface) {
+
+            $familyMemberCount = array_map(function ($class) {
+                return $this->getCountOfMember(call_user_func([$class, 'getEntityName']));
+            }, $familyMember->getPossibleRequiredMember());
+
+            return array_sum($familyMemberCount) > 0;
         }
 
-        $familyMemberCount = array_map(function ($class) {
-            return $this->getCountOfMember(call_user_func([$class, 'getEntityName']));
-        }, $familyMember->getPossibleRequiredMember());
+        if ($familyMember instanceof RequiresAllOtherMemberInterface) {
 
-        if (count($familyMemberCount) === 0) {
-            return true;
+            $familyMemberCount = array_map(function ($class) {
+                return $this->getCountOfMember(call_user_func([$class, 'getEntityName']));
+            }, $familyMember->getRequiredMember());
+
+            return array_search(0, $familyMemberCount) === FALSE;
         }
 
-        return array_sum($familyMemberCount);
+        return true;
+
+
     }
 
     /**

@@ -3,13 +3,13 @@
 namespace FamilyMembers;
 
 use Interfaces\FamilyMemberInterface;
-use Interfaces\RequiresOtherMemberInterface;
+use Interfaces\RequiresAllOtherMemberInterface;
 use Traits\EntityNameTrait;
-use Traits\RequiresMumOrDadTrait;
+use Traits\RequiresMumAndDadTrait;
 
-class Child implements FamilyMemberInterface, RequiresOtherMemberInterface
+class Child implements FamilyMemberInterface, RequiresAllOtherMemberInterface
 {
-    use RequiresMumOrDadTrait;
+    use RequiresMumAndDadTrait;
     use EntityNameTrait;
 
     public function getMonthlyFoodCost(int $entityCount): float

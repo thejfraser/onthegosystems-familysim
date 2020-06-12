@@ -2,7 +2,7 @@
 
 namespace Interfaces;
 
-Interface RequiresOtherMemberInterface
+Interface RequiresSomeOtherMemberInterface
 {
     public function getPossibleRequiredMember(): array;
 }

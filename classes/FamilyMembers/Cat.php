@@ -3,11 +3,11 @@
 namespace FamilyMembers;
 
 use Interfaces\FamilyMemberInterface;
-use Interfaces\RequiresOtherMemberInterface;
+use Interfaces\RequiresSomeOtherMemberInterface;
 use Traits\EntityNameTrait;
 use Traits\RequiresMumOrDadTrait;
 
-class Cat implements FamilyMemberInterface, RequiresOtherMemberInterface
+class Cat implements FamilyMemberInterface, RequiresSomeOtherMemberInterface
 {
     use RequiresMumOrDadTrait;
     use EntityNameTrait;

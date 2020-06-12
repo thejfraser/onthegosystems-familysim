@@ -2,6 +2,7 @@
 
 use Exceptions\LimitedQuantityException;
 use Exceptions\MissingRequiredMemberException;
+use FamilyMembers\AdaptChild;
 use FamilyMembers\Cat;
 use FamilyMembers\Child;
 use FamilyMembers\Dad;
@@ -59,8 +60,42 @@ class FamilyTest extends TestCase
     public function testAddParentAddChild()
     {
         $family = new Family();
+        $this->expectException(MissingRequiredMemberException::class);
+        $family->addMember(new Mum());
+        $family->addMember(new Child());
+    }
 
-        $this->assertTrue(($family->addMember(new Mum()) && $family->addMember(new Child())));
+    public function testAddMumAndDadAndChild()
+    {
+        $family = new Family();
+        $result = (
+            $family->addMember(new Mum()) &&
+            $family->addMember(new Dad()) &&
+            $family->addMember(new Child())
+        );
+        $this->assertEquals(true, $result);
+    }
+
+    public function testAdaptChildNoParent()
+    {
+        $family = new Family();
+        $this->expectException(MissingRequiredMemberException::class);
+        $family->addMember(new AdaptChild());
+    }
+
+    public function testAdaptChildDad()
+    {
+        $family = new Family();
+        $family->addMember(new Dad());
+        $this->expectException(MissingRequiredMemberException::class);
+        $family->addMember(new AdaptChild());
+    }
+
+    public function testAdaptChildMum()
+    {
+        $family = new Family();
+        $family->addMember(new Mum());
+        $this->assertEquals(true, $family->addMember(new AdaptChild()));
     }
 
     public function testMonthlyFoodCostOneDad()
